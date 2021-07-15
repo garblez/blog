@@ -1,12 +1,17 @@
 from rest_framework import serializers
 from blog.models import Article, Comment
 
-class ArticleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Article
-        fields = ['title', 'content']
 
-class CommentSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    article = serializers.ReadOnlyField(source='article.title')
+
     class Meta:
         model = Comment 
         fields = ['author', 'content', 'article']
+
+class ArticleSerializer(serializers.HyperlinkedModelSerializer):
+    comments = serializers.HyperlinkedModelSerializer(many=True, view_name="comment-detail")
+
+    class Meta:
+        model = Article
+        fields = ['title', 'content', 'comments']
