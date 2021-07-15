@@ -5,7 +5,9 @@ from blog.serializers import ArticleSerializer, CommentSerializer
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
+
+from blog.models import Comment
 
 class ArticleList(APIView):
     def get(self, request, format=None):
@@ -45,3 +47,12 @@ class ArticleDetail(APIView):
         article = self.get_object(pk)
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CommentList(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer

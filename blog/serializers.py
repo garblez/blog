@@ -3,15 +3,15 @@ from blog.models import Article, Comment
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
-    article = serializers.ReadOnlyField(source='article.title')
-
+    
     class Meta:
         model = Comment 
         fields = ['author', 'content', 'article']
 
+
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
-    comments = serializers.HyperlinkedModelSerializer(many=True, view_name="comment-detail")
+    #comments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Article
-        fields = ['title', 'content', 'comments']
+        fields = ['title', 'content']
